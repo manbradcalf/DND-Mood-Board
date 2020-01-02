@@ -1,0 +1,71 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <style>
+        html, body {
+            height: 100%;
+        }
+
+        .fitted-image {
+            width: 100%;
+            height: 100vh;
+            object-fit: contain;
+        }
+
+        audio {
+            display: none
+        }
+
+
+    </style>
+    <script src="//code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+            crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"
+            integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function () {
+
+            // Connect to the Socket.IO server.
+            // The connection URL has the following format, relative to the current page:
+            //     http[s]://<domain>:<port>[/<namespace>]
+            var socket = io.connect('http://' + document.domain + ':' + location.port);
+            var audio = document.getElementById("audio");
+
+            // Event handler for new connections.
+            // The callback function is invoked when a connection with the
+            // server is established.
+            socket.on('connect', function () {
+                console.log("im connected on " + document.domain + ':' + location.port);
+            });
+
+            // Event handler for server sent data.
+            // The callback function is invoked whenever the server emits data
+            // to the client.
+            socket.on('change_image', function (image_path) {
+                console.log('change called and image path is ' + image_path);
+                $("#screen").attr("src", image_path);
+            });
+
+            // Event handler for server sent data.
+            // The callback function is invoked whenever the server emits data
+            // to the client.
+            socket.on('change_audio', function (audio_path) {
+                console.log('change called and audio path is ' + audio_path);
+                $("#audio").attr("src", audio_path);
+                audio.play()
+            });
+        });
+    </script>
+</head>
+
+<body>
+
+<div class="screen">
+    <img id="screen" src="https://iamsteve.me/archive/placeholder/5.jpg" class="fitted-image">
+</div>
+
+<audio controls loop id="audio" src="sharn.mp3" type="audio/mpeg">
+</audio>
+
+</body>
+</html>

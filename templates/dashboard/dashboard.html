@@ -1,0 +1,130 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Flask-SocketIO Test</title>
+    <script src="//code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+            crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"
+            integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function () {
+
+            // Connect to the Socket.IO server.
+            // The connection URL has the following format, relative to the current page:
+            //     http[s]://<domain>:<port>[/<namespace>]
+            var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+            // Event handler for new connections.
+            // The callback function is invoked when a connection with the
+            // server is established.
+            socket.on('connect', function () {
+                console.log("im connected on" + document.domain + ':' + location.port);
+                socket.emit('my_event', {data: 'I\'m connected!'});
+            });
+
+
+            $(".audioButton").click(function () {
+                console.log("i clicked the audio button");
+                socket.emit('request_audio_update', "static/audio/" + $(this).text() + ".mp3");
+                return false;
+            })
+
+            $('img').click(function () {
+                console.log("i clicked an image button");
+                socket.emit('request_image_update', $(this).attr('src'));
+                return false;
+            })
+        });
+    </script>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial;
+        }
+
+        button {
+            font-size: 24px;
+            background-color: #008CBA;
+            color: #ffffff;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            padding: 32px;
+        }
+
+        .row {
+            display: -ms-flexbox; /* IE10 */
+            display: flex;
+            -ms-flex-wrap: wrap; /* IE10 */
+            flex-wrap: wrap;
+            padding: 0 4px;
+        }
+
+        /* Create four equal columns that sits next to each other */
+        .column {
+            -ms-flex: 25%; /* IE10 */
+            flex: 25%;
+            max-width: 25%;
+            padding: 0 4px;
+        }
+
+        .column img {
+            margin-top: 8px;
+            vertical-align: middle;
+            width: 100%;
+        }
+
+        /* Responsive layout - makes a two column-layout instead of four columns */
+        @media screen and (max-width: 800px) {
+            .column {
+                -ms-flex: 50%;
+                flex: 50%;
+                max-width: 50%;
+            }
+        }
+
+        /* Responsive layout - makes the two columns stack on top of each other instead of next to each other */
+        @media screen and (max-width: 600px) {
+            .column {
+                -ms-flex: 100%;
+                flex: 100%;
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<h1 class="header">DnD Mood Board</h1>
+
+<div class="row">
+    <div class="column" id="images">
+        <h2>Choose Image</h2>
+        {{ for   }}
+        {{  }}
+        <img src="http://klubbsaga2015.wdfiles.com/local--files/sharn/Sharn%2001a.jpg" style="width:100%">
+        <img src="https://i.ibb.co/x3mvDLr/Inquisitives.jpg" style="width:100%">
+        <img src="https://cdnb.artstation.com/p/assets/images/images/019/218/131/large/juho-huttunen-project-raptor-sharn.jpg?1562558780" style="width:100%">
+        <img src="https://vignette.wikia.nocookie.net/eberron/images/2/2b/D%26D_-_4th_Edition_-_Eberron_Map_Sharn.jpg/revision/latest?cb=20090819130113" style="width:100%">
+        <img src="https://www.tokkoro.com/picsup/2001626-sharn-city-of-towers__14.jpg" style="width:100%">
+        <img src="https://i.imgur.com/T9Lf7DO.jpg" style="width:100%">
+        <img src="https://www.w3schools.com/w3images/paris.jpg" style="width:100%">
+    </div>
+    <div class="column" id="audio">
+        <h2>Choose Audio</h2>
+        <button class="audioButton">sharn</button>
+        <button class="audioButton">horse</button>
+        <button class="audioButton">lower-sharn</button>
+        <button class="audioButton">solari</button>
+        <button class="audioButton">sharn-tavern</button>
+    </div>
+</div>
+
+</body>
+</html>
